@@ -305,23 +305,23 @@ PHP_FUNCTION(git_patch_print)
  */
 PHP_FUNCTION(git_patch_to_str)
 {
-	int result = 0;
-	char *string = NULL;
-	zval *patch = NULL;
-	php_git2_t *_patch = NULL;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &patch) == FAILURE) {
-		return;
-	}
-
-	ZEND_FETCH_RESOURCE(_patch, php_git2_t*, &patch, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_patch_to_str(&string, PHP_GIT2_V(_patch, patch));
-	if (result != 0) {
-		RETURN_FALSE;
-	}
-
-	RETVAL_STRING(string, 1);
-	free(string);
+//	int result = 0;
+//	char *string = NULL;
+//	zval *patch = NULL;
+//	php_git2_t *_patch = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &patch) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_patch, php_git2_t*, &patch, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_patch_to_str(&string, PHP_GIT2_V(_patch, patch));
+//	if (result != 0) {
+//		RETURN_FALSE;
+//	}
+//
+//	RETVAL_STRING(string, 1);
+//	free(string);
 }
 /* }}} */

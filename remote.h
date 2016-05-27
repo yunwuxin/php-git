@@ -70,17 +70,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_pushurl, 0, 0, 1)
 	ZEND_ARG_INFO(0, remote)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_url, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_url, 0, 0, 3)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, remote)
 	ZEND_ARG_INFO(0, url)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_pushurl, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_pushurl, 0, 0, 3)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, remote)
 	ZEND_ARG_INFO(0, url)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_add_fetch, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_add_fetch, 0, 0, 3)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, remote)
 	ZEND_ARG_INFO(0, refspec)
 ZEND_END_ARG_INFO()
@@ -95,7 +98,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_fetch_refspecs, 0, 0, 2)
 	ZEND_ARG_INFO(0, array)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_add_push, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_add_push, 0, 0, 3)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, remote)
 	ZEND_ARG_INFO(0, refspec)
 ZEND_END_ARG_INFO()
@@ -152,8 +156,12 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_free, 0, 0, 1)
 	ZEND_ARG_INFO(0, remote)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_update_tips, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_update_tips, 0, 0, 5)
 	ZEND_ARG_INFO(0, remote)
+	ZEND_ARG_INFO(0, callbacks)
+	ZEND_ARG_INFO(0, update_fetchhead)
+	ZEND_ARG_INFO(0, download_tags)
+	ZEND_ARG_INFO(0, reflog_message)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_fetch, 0, 0, 1)
@@ -195,7 +203,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_autotag, 0, 0, 1)
 	ZEND_ARG_INFO(0, remote)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_autotag, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_remote_set_autotag, 0, 0, 3)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, remote)
 	ZEND_ARG_INFO(0, value)
 ZEND_END_ARG_INFO()
@@ -276,7 +285,7 @@ PHP_FUNCTION(git_remote_get_fetch_refspecs);
 */
 PHP_FUNCTION(git_remote_set_fetch_refspecs);
 
-/* {{{ proto long git_remote_add_push(remote, refspec)
+/* {{{ proto long git_remote_add_push(repo, remote, refspec)
 */
 PHP_FUNCTION(git_remote_add_push);
 
@@ -368,7 +377,7 @@ PHP_FUNCTION(git_remote_stats);
 */
 PHP_FUNCTION(git_remote_autotag);
 
-/* {{{ proto void git_remote_set_autotag(remote, value)
+/* {{{ proto void git_remote_set_autotag(repo, remote, value)
 */
 PHP_FUNCTION(git_remote_set_autotag);
 

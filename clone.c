@@ -11,7 +11,6 @@ static void php_git2_git_clone_options_to_array(git_clone_options *options, zval
 
     add_assoc_long_ex(result, ZEND_STRS("version"), options->version);
     add_assoc_long_ex(result, ZEND_STRS("bare"), options->bare);
-    add_assoc_long_ex(result, ZEND_STRS("ignore_cert_errors"), options->ignore_cert_errors);
     /* TODO: make other options available */ 
     *out = result;
 }
@@ -20,7 +19,6 @@ static void php_git2_array_to_git_clone_options(git_clone_options *options, zval
 {
     options->version = php_git2_read_arrval_long2(array, ZEND_STRS("version"), 1 TSRMLS_CC);
     options->bare = php_git2_read_arrval_long2(array, ZEND_STRS("bare"), 0 TSRMLS_CC);
-    options->ignore_cert_errors = php_git2_read_arrval_long2(array, ZEND_STRS("ignore_cert_errors"), 0 TSRMLS_CC);
 }
 
 /* {{{ proto resource git_clone(string $url, string $localpath[, array $options])

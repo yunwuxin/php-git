@@ -44,13 +44,13 @@ PHP_FUNCTION(giterr_clear)
  */
 PHP_FUNCTION(giterr_detach)
 {
-	int result = 0;
-	git_error cpy;
-	zval *array;
-
-	result = giterr_detach(&cpy);
-	php_git2_error_to_array(&cpy, &array);
-	RETURN_ZVAL(array, 0, 1);
+//	int result = 0;
+//	git_error cpy;
+//	zval *array;
+//
+//	result = giterr_detach(&cpy);
+//	php_git2_error_to_array(&cpy, &array);
+//	RETURN_ZVAL(array, 0, 1);
 }
 /* }}} */
 

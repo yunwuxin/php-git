@@ -180,7 +180,7 @@ static void php_git2_git_filter_cleanup_fn(
 	}
 }
 
-/* {{{ proto long git_filter_list_load(resource $repo, resource $blob, string $path,  $mode)
+/* {{{ proto long git_filter_list_load(resource $repo, resource $blob, string $path,  $mode ,$flag)
  */
 PHP_FUNCTION(git_filter_list_load)
 {
@@ -190,10 +190,11 @@ PHP_FUNCTION(git_filter_list_load)
 	php_git2_t *_repo = NULL, *_blob = NULL, *_result;
 	char *path = NULL;
 	long mode = 0;
+	long flag = 0;
 	git_blob *__blob = NULL;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r|zsl", &repo, &blob, &path, &path_len, &mode) == FAILURE) {
+		"r|zsll", &repo, &blob, &path, &path_len, &mode,&flag) == FAILURE) {
 		return;
 	}
 	
@@ -204,7 +205,7 @@ PHP_FUNCTION(git_filter_list_load)
 		__blob = PHP_GIT2_V(_blob, blob);
 	}
 
-	result = git_filter_list_load(&filters, PHP_GIT2_V(_repo, repository), blob, path, mode);
+	result = git_filter_list_load(&filters, PHP_GIT2_V(_repo, repository), blob, path, mode,flag);
 	if (php_git2_check_error(result, "git_filter_list_load" TSRMLS_CC)) {
 		RETURN_FALSE
 	}
@@ -345,23 +346,23 @@ PHP_FUNCTION(git_filter_lookup)
 }
 /* }}} */
 
-/* {{{ proto resource git_filter_list_new(resource $repo,  $mode)
+/* {{{ proto resource git_filter_list_new(resource $repo,  $mode,$options)
  */
 PHP_FUNCTION(git_filter_list_new)
 {
 	php_git2_t *result = NULL, *_repo = NULL;
 	git_filter_list *out = NULL;
 	zval *repo = NULL;
-	long mode = 0;
+	long mode = 0,options = 0;
 	int error = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rl", &repo, &mode) == FAILURE) {
+		"rll", &repo, &mode, &options) == FAILURE) {
 		return;
 	}
 
 	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_filter_list_new(&out, PHP_GIT2_V(_repo, repository), mode);
+	error = git_filter_list_new(&out, PHP_GIT2_V(_repo, repository), mode, options);
 	if (php_git2_check_error(error, "git_filter_list_new" TSRMLS_CC)) {
 		RETURN_FALSE;
 	}

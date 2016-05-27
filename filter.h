@@ -26,11 +26,12 @@
 #ifndef PHP_GIT2_FILTER_H
 #define PHP_GIT2_FILTER_H
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_load, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_load, 0, 0, 5)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, blob)
 	ZEND_ARG_INFO(0, path)
 	ZEND_ARG_INFO(0, mode)
+	ZEND_ARG_INFO(0, flag)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_apply_to_data, 0, 0, 2)
@@ -58,9 +59,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_lookup, 0, 0, 1)
 	ZEND_ARG_INFO(0, name)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_new, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_new, 0, 0, 3)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, mode)
+	ZEND_ARG_INFO(0, options)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_filter_list_push, 0, 0, 3)

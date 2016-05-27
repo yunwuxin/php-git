@@ -34,27 +34,31 @@ static int php_git2_treebuilder_filter_cb(const git_tree_entry *entry, void *pay
 }
 
 
-/* {{{ proto resource git_treebuilder_create([resource $source])
+/* {{{ proto resource git_treebuilder_new(resource $repo ,[resource $source])
  */
-PHP_FUNCTION(git_treebuilder_create)
+PHP_FUNCTION(git_treebuilder_new)
 {
-	php_git2_t *result = NULL, *_source = NULL;
+	php_git2_t *result = NULL, *_source = NULL, *_repo = NULL;
 	git_treebuilder *out = NULL;
 	zval *source = NULL;
+    zval *repo = NULL;
 	git_tree *tree = NULL;
 	int error = 0;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"|r", &source) == FAILURE) {
+		"r|r", &repo , &source) == FAILURE) {
 		return;
 	}
+
+	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+
 	if (source != NULL) {
+		ZEND_FETCH_RESOURCE(_source, php_git2_t*, &source, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 		tree = PHP_GIT2_V(_source, tree);
 	}
 
-	ZEND_FETCH_RESOURCE(_source, php_git2_t*, &source, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_treebuilder_create(&out, tree);
-	if (php_git2_check_error(error, "git_treebuilder_create" TSRMLS_CC)) {
+	error = git_treebuilder_new(&out, PHP_GIT2_V(_repo, repository), tree);
+	if (php_git2_check_error(error, "git_treebuilder_new" TSRMLS_CC)) {
 		RETURN_FALSE;
 	}
 	if (php_git2_make_resource(&result, PHP_GIT2_TYPE_TREEBUILDER, out, 1 TSRMLS_CC)) {
@@ -224,12 +228,10 @@ PHP_FUNCTION(git_treebuilder_filter)
 /* }}} */
 
 
-/* {{{ proto resource git_treebuilder_write(repo, bld)
+/* {{{ proto resource git_treebuilder_write(bld)
 */
 PHP_FUNCTION(git_treebuilder_write)
 {
-	zval *repo;
-	php_git2_t *_repo;
 	zval *bld;
 	php_git2_t *_bld;
 	git_oid id;
@@ -237,14 +239,13 @@ PHP_FUNCTION(git_treebuilder_write)
 	char out[GIT2_OID_HEXSIZE] = {0};
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rr", &repo, &bld) == FAILURE) {
+		"r", &bld) == FAILURE) {
 		return;
 	}
 
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 	ZEND_FETCH_RESOURCE(_bld, php_git2_t*, &bld, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 
-	error = git_treebuilder_write(&id, PHP_GIT2_V(_repo, repository), PHP_GIT2_V(_bld, treebuilder));
+	error = git_treebuilder_write(&id, PHP_GIT2_V(_bld, treebuilder));
 	if (php_git2_check_error(error, "git_treebuilder_write" TSRMLS_CC)) {
 		RETURN_FALSE;
 	}

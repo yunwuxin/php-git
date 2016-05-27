@@ -9,7 +9,7 @@ PHP_FUNCTION(git_checkout_head)
 	zval *opts = NULL, *repo = NULL;
 	php_git2_t *_repo = NULL;
 	int result = 0, shoud_free = 0;
-	git_checkout_opts *options;
+	git_checkout_options *options;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"r|a", &repo, &opts) == FAILURE) {
@@ -63,7 +63,7 @@ PHP_FUNCTION(git_checkout_tree)
 	int result = 0;
 	zval *repo = NULL, *treeish = NULL, *opts = NULL;
 	php_git2_t *_repo = NULL, *_treeish = NULL;
-	git_checkout_opts options = {0};
+	git_checkout_options options = {0};
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"rra", &repo, &treeish, &opts) == FAILURE) {
@@ -73,7 +73,7 @@ PHP_FUNCTION(git_checkout_tree)
 	if (opts != NULL && php_git2_array_to_git_checkout_opts(&options, opts TSRMLS_CC)) {
 		RETURN_FALSE;
 	} else {
-		memset(&options, '\0', sizeof(git_checkout_opts));
+		memset(&options, '\0', sizeof(git_checkout_options));
 	}
 
 	if (treeish != NULL) {

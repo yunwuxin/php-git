@@ -26,7 +26,8 @@
 #ifndef PHP_GIT2_TREEBUILDER_H
 #define PHP_GIT2_TREEBUILDER_H
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_treebuilder_create, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_treebuilder_new, 0, 0, 2)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, source)
 ZEND_END_ARG_INFO()
 
@@ -65,14 +66,13 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_treebuilder_filter, 0, 0, 3)
 	ZEND_ARG_INFO(1, payload)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_treebuilder_write, 0, 0, 2)
-	ZEND_ARG_INFO(0, repo)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_treebuilder_write, 0, 0, 1)
 	ZEND_ARG_INFO(0, bld)
 ZEND_END_ARG_INFO()
 
-/* {{{ proto resource git_treebuilder_create(source)
+/* {{{ proto resource git_treebuilder_new(repo, source)
 */
-PHP_FUNCTION(git_treebuilder_create);
+PHP_FUNCTION(git_treebuilder_new);
 
 /* {{{ proto void git_treebuilder_clear(bld)
 */
@@ -102,7 +102,7 @@ PHP_FUNCTION(git_treebuilder_remove);
 */
 PHP_FUNCTION(git_treebuilder_filter);
 
-/* {{{ proto long git_treebuilder_write(repo, bld)
+/* {{{ proto long git_treebuilder_write(bld)
 */
 PHP_FUNCTION(git_treebuilder_write);
 

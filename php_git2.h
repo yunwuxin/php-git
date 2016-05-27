@@ -53,6 +53,7 @@
 #include "git2/trace.h"
 #include "git2/sys/filter.h"
 #include "git2/sys/odb_backend.h"
+#include "git2/sys/transport.h"
 
 #include "date/php_date.h"
 
@@ -113,7 +114,7 @@ enum php_git2_resource_type {
 	PHP_GIT2_TYPE_REMOTE,
 	PHP_GIT2_TYPE_DIFF,
 	PHP_GIT2_TYPE_MERGE_RESULT,
-	PHP_GIT2_TYPE_MERGE_HEAD,
+	PHP_GIT2_TYPE_ANNOTATED_COMMIT,
 	PHP_GIT2_TYPE_PATHSPEC,
 	PHP_GIT2_TYPE_PATHSPEC_MATCH_LIST,
 	PHP_GIT2_TYPE_PATCH,
@@ -167,7 +168,7 @@ typedef struct php_git2_t {
 		git_remote *remote;
 		git_diff *diff;
 		git_merge_result *merge_result;
-		git_merge_head *merge_head;
+		git_annotated_commit *annotated_commit;
 		git_pathspec *pathspec;
 		git_pathspec_match_list *pathspec_match_list;
 		git_patch *patch;

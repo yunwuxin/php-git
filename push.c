@@ -82,32 +82,32 @@ PHP_FUNCTION(git_push_set_options)
  */
 PHP_FUNCTION(git_push_set_callbacks)
 {
-	int result = 0;
-	zval *push = NULL, *pack_progress_cb_payload = NULL, *transfer_progress_cb_payload = NULL;
-	php_git2_t *_push = NULL;
-	zend_fcall_info pack_fci = empty_fcall_info;
-	zend_fcall_info_cache pack_fcc = empty_fcall_info_cache;
-	zend_fcall_info transfer_fci = empty_fcall_info;
-	zend_fcall_info_cache transfer_fcc = empty_fcall_info_cache;
-	php_git2_cb_t *pack_cb = NULL;
-	php_git2_cb_t *transfer_cb = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rfzfz", &push, &pack_fci, &pack_fcc, &pack_progress_cb_payload, &transfer_fci, &transfer_fcc, &transfer_progress_cb_payload) == FAILURE) {
-		return;
-	}
-
-	ZEND_FETCH_RESOURCE(_push, php_git2_t*, &push, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (php_git2_cb_init(&pack_cb, &pack_fci, &pack_fcc, pack_progress_cb_payload TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	if (php_git2_cb_init(&transfer_cb, &transfer_fci, &transfer_fcc, transfer_progress_cb_payload TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	result = git_push_set_callbacks(PHP_GIT2_V(_push, push), NULL, pack_cb, NULL, transfer_cb);
-	php_git2_cb_free(pack_cb);
-	php_git2_cb_free(transfer_cb);
-	RETURN_LONG(result);
+//	int result = 0;
+//	zval *push = NULL, *pack_progress_cb_payload = NULL, *transfer_progress_cb_payload = NULL;
+//	php_git2_t *_push = NULL;
+//	zend_fcall_info pack_fci = empty_fcall_info;
+//	zend_fcall_info_cache pack_fcc = empty_fcall_info_cache;
+//	zend_fcall_info transfer_fci = empty_fcall_info;
+//	zend_fcall_info_cache transfer_fcc = empty_fcall_info_cache;
+//	php_git2_cb_t *pack_cb = NULL;
+//	php_git2_cb_t *transfer_cb = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"rfzfz", &push, &pack_fci, &pack_fcc, &pack_progress_cb_payload, &transfer_fci, &transfer_fcc, &transfer_progress_cb_payload) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_push, php_git2_t*, &push, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	if (php_git2_cb_init(&pack_cb, &pack_fci, &pack_fcc, pack_progress_cb_payload TSRMLS_CC)) {
+//		RETURN_FALSE;
+//	}
+//	if (php_git2_cb_init(&transfer_cb, &transfer_fci, &transfer_fcc, transfer_progress_cb_payload TSRMLS_CC)) {
+//		RETURN_FALSE;
+//	}
+//	result = git_push_set_callbacks(PHP_GIT2_V(_push, push), NULL, pack_cb, NULL, transfer_cb);
+//	php_git2_cb_free(pack_cb);
+//	php_git2_cb_free(transfer_cb);
+//	RETURN_LONG(result);
 }
 /* }}} */
 
@@ -175,18 +175,18 @@ PHP_FUNCTION(git_push_finish)
  */
 PHP_FUNCTION(git_push_unpack_ok)
 {
-	int result = 0;
-	zval *push = NULL;
-	php_git2_t *_push = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &push) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_push, php_git2_t*, &push, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_push_unpack_ok(PHP_GIT2_V(_push, push));
-	RETURN_LONG(result);
+//	int result = 0;
+//	zval *push = NULL;
+//	php_git2_t *_push = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &push) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_push, php_git2_t*, &push, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_push_unpack_ok(PHP_GIT2_V(_push, push));
+//	RETURN_LONG(result);
 }
 /* }}} */
 

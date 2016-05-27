@@ -376,7 +376,7 @@ class Fashion
                 "git_cred",
                 "git_transport",
                 "git_remote",
-                "git_merge_head",
+                "git_annotated_commit",
                 "git_merge_result",
                 "git_pathspec",
                 "git_pathspec_match_list",

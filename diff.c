@@ -217,19 +217,19 @@ PHP_FUNCTION(git_diff_find_similar)
  */
 PHP_FUNCTION(git_diff_options_init)
 {
-	int result = 0;
-	git_diff_options options = {0};
-	long version = GIT_DIFF_OPTIONS_VERSION;
-	zval *out;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"|l", &version) == FAILURE) {
-		return;
-	}
-
-	result = git_diff_options_init(&options, version);
-	php_git2_git_diff_options_to_array(&options, &out TSRMLS_CC);
-	RETURN_ZVAL(out, 0, 1);
+//	int result = 0;
+//	git_diff_options options = {0};
+//	long version = GIT_DIFF_OPTIONS_VERSION;
+//	zval *out;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"|l", &version) == FAILURE) {
+//		return;
+//	}
+//
+//	result = git_diff_options_init(&options, version);
+//	php_git2_git_diff_options_to_array(&options, &out TSRMLS_CC);
+//	RETURN_ZVAL(out, 0, 1);
 }
 /* }}} */
 
@@ -340,7 +340,7 @@ PHP_FUNCTION(git_diff_foreach)
 		&line_fci, &line_fcc
 	);
 
-	result = git_diff_foreach(PHP_GIT2_V(_diff, diff), php_git2_git_diff_file_cb, php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
+	result = git_diff_foreach(PHP_GIT2_V(_diff, diff), php_git2_git_diff_file_cb,NULL, php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
 	php_git2_multi_cb_free(cb);
 	RETURN_LONG(result);
 }
@@ -422,7 +422,7 @@ PHP_FUNCTION(git_diff_blobs)
 	result = git_diff_blobs(
 		PHP_GIT2_V(_old_blob, blob), old_as_path,
 		PHP_GIT2_V(_new_blob, blob), new_as_path, NULL,
-		php_git2_git_diff_file_cb, php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
+		php_git2_git_diff_file_cb, NULL,php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
 	php_git2_multi_cb_free(cb);
 	RETURN_LONG(result);
 }
@@ -462,7 +462,7 @@ PHP_FUNCTION(git_diff_blob_to_buffer)
 		PHP_GIT2_V(_old_blob, blob), old_as_path,
 		buffer, buffer_len, buffer_as_path,
 		&opts,
-		php_git2_git_diff_file_cb, php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
+		php_git2_git_diff_file_cb,NULL, php_git2_git_diff_hunk_cb, php_git2_git_diff_line_cb, cb);
 	php_git2_multi_cb_free(cb);
 	RETURN_LONG(result);
 }

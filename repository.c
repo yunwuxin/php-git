@@ -309,7 +309,7 @@ PHP_FUNCTION(git_repository_discover)
 		return;
 	}
 
-	error = git_repository_discover(buffer, buffer_len, start_path, across_fs, ceiling_dirs);
+	error = git_repository_discover(buffer, start_path, across_fs, ceiling_dirs);
 	if (php_git2_check_error(error, "git_repository_discover" TSRMLS_CC)) {
 		RETURN_FALSE
 	}
@@ -654,7 +654,7 @@ PHP_FUNCTION(git_repository_index)
 }
 /* }}} */
 
-/* {{{ proto resource git_repository_message(long $len, resource $repo)
+/* {{{ proto resource git_repository_message( resource $repo)
  */
 PHP_FUNCTION(git_repository_message)
 {
@@ -669,7 +669,7 @@ PHP_FUNCTION(git_repository_message)
 		return;
 	}
 	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_repository_message(buffer, buffer_len, PHP_GIT2_V(_repo, repository));
+	error = git_repository_message(buffer, PHP_GIT2_V(_repo, repository));
 	if (php_git2_check_error(error, "git_repository_message" TSRMLS_CC)) {
 		RETURN_FALSE
 	}
@@ -701,18 +701,18 @@ PHP_FUNCTION(git_repository_message_remove)
  */
 PHP_FUNCTION(git_repository_merge_cleanup)
 {
-	int result = 0;
-	zval *repo = NULL;
-	php_git2_t *_repo = NULL;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &repo) == FAILURE) {
-		return;
-	}
-
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_repository_merge_cleanup(PHP_GIT2_V(_repo, repository));
-	RETURN_LONG(result);
+//	int result = 0;
+//	zval *repo = NULL;
+//	php_git2_t *_repo = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &repo) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_repository_merge_cleanup(PHP_GIT2_V(_repo, repository));
+//	RETURN_LONG(result);
 }
 /* }}} */
 

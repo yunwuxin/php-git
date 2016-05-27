@@ -64,115 +64,6 @@ PHP_FUNCTION(git_merge_base_many)
 }
 /* }}} */
 
-/* {{{ proto resource git_merge_head_from_ref(resource $repo, resource $ref)
- */
-PHP_FUNCTION(git_merge_head_from_ref)
-{
-	php_git2_t *result = NULL, *_repo = NULL, *_ref = NULL;
-	git_merge_head *out = NULL;
-	zval *repo = NULL, *ref = NULL;
-	int error = 0;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rr", &repo, &ref) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	ZEND_FETCH_RESOURCE(_ref, php_git2_t*, &ref, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_merge_head_from_ref(&out, PHP_GIT2_V(_repo, repository), PHP_GIT2_V(_ref, reference));
-	if (php_git2_check_error(error, "git_merge_head_from_ref" TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	if (php_git2_make_resource(&result, PHP_GIT2_TYPE_MERGE_HEAD, out, 1 TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	ZVAL_RESOURCE(return_value, GIT2_RVAL_P(result));
-}
-/* }}} */
-
-/* {{{ proto resource git_merge_head_from_fetchhead(resource $repo, string $branch_name, string $remote_url, string $oid)
- */
-PHP_FUNCTION(git_merge_head_from_fetchhead)
-{
-	php_git2_t *result = NULL, *_repo = NULL;
-	git_merge_head *out = NULL;
-	zval *repo = NULL;
-	char *branch_name = NULL, *remote_url = NULL, *oid = NULL;
-	int branch_name_len = 0, remote_url_len = 0, oid_len = 0, error = 0;
-	git_oid __oid = {0};
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rsss", &repo, &branch_name, &branch_name_len, &remote_url, &remote_url_len, &oid, &oid_len) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (git_oid_fromstrn(&__oid, oid, oid_len)) {
-		RETURN_FALSE;
-	}
-	error = git_merge_head_from_fetchhead(&out, PHP_GIT2_V(_repo, repository), branch_name, remote_url, &__oid);
-	if (php_git2_check_error(error, "git_merge_head_from_fetchhead" TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	if (php_git2_make_resource(&result, PHP_GIT2_TYPE_MERGE_HEAD, out, 1 TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	ZVAL_RESOURCE(return_value, GIT2_RVAL_P(result));
-}
-/* }}} */
-
-/* {{{ proto resource git_merge_head_from_oid(resource $repo, string $oid)
- */
-PHP_FUNCTION(git_merge_head_from_oid)
-{
-	php_git2_t *result = NULL, *_repo = NULL;
-	git_merge_head *out = NULL;
-	zval *repo = NULL;
-	char *oid = NULL;
-	int oid_len = 0, error = 0;
-	git_oid __oid = {0};
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rs", &repo, &oid, &oid_len) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (git_oid_fromstrn(&__oid, oid, oid_len)) {
-		RETURN_FALSE;
-	}
-	error = git_merge_head_from_oid(&out, PHP_GIT2_V(_repo, repository), &__oid);
-	if (php_git2_check_error(error, "git_merge_head_from_oid" TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	if (php_git2_make_resource(&result, PHP_GIT2_TYPE_MERGE_HEAD, out, 1 TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	ZVAL_RESOURCE(return_value, GIT2_RVAL_P(result));
-}
-/* }}} */
-
-/* {{{ proto void git_merge_head_free(resource $head)
- */
-PHP_FUNCTION(git_merge_head_free)
-{
-	zval *head = NULL;
-	php_git2_t *_head = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &head) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_head, php_git2_t*, &head, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (GIT2_SHOULD_FREE(_head)) {
-		git_merge_head_free(PHP_GIT2_V(_head, merge_head));
-		GIT2_SHOULD_FREE(_head) = 0;
-	};
-	zval_ptr_dtor(&head);
-}
-/* }}} */
 
 /* {{{ proto resource git_merge_trees(resource $repo, resource $ancestor_tree, resource $our_tree, resource $their_tree,  $opts)
  */
@@ -210,9 +101,9 @@ PHP_FUNCTION(git_merge)
 	php_git2_t *result = NULL, *_repo = NULL, *_their_head = NULL;
 	git_merge_result *out = NULL;
 	zval *repo = NULL, *opts = NULL, *theirhead = NULL;
-	git_merge_head *heads[1];
+	git_annotated_commit *heads[1];
 	int error = 0;
-	git_merge_opts options = GIT_MERGE_OPTS_INIT;
+	git_merge_options options = GIT_MERGE_OPTIONS_INIT;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"rza", &repo, &theirhead, &opts) == FAILURE) {
@@ -221,8 +112,7 @@ PHP_FUNCTION(git_merge)
 
 	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 	ZEND_FETCH_RESOURCE(_their_head, php_git2_t*, &theirhead, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	heads[0] = PHP_GIT2_V(_their_head, merge_head);
-	options.merge_flags = GIT_MERGE_NO_FASTFORWARD;
+	heads[0] = PHP_GIT2_V(_their_head, annotated_commit);
 
 	error = git_merge(&out, PHP_GIT2_V(_repo, repository), heads, 1, &options);
 	if (php_git2_check_error(error, "git_merge" TSRMLS_CC)) {
@@ -239,18 +129,18 @@ PHP_FUNCTION(git_merge)
  */
 PHP_FUNCTION(git_merge_result_is_uptodate)
 {
-	int result = 0;
-	zval *merge_result = NULL;
-	php_git2_t *_merge_result = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &merge_result) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_merge_result_is_uptodate(PHP_GIT2_V(_merge_result, merge_result));
-	RETURN_BOOL(result);
+//	int result = 0;
+//	zval *merge_result = NULL;
+//	php_git2_t *_merge_result = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &merge_result) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_merge_result_is_uptodate(PHP_GIT2_V(_merge_result, merge_result));
+//	RETURN_BOOL(result);
 }
 /* }}} */
 
@@ -258,18 +148,18 @@ PHP_FUNCTION(git_merge_result_is_uptodate)
  */
 PHP_FUNCTION(git_merge_result_is_fastforward)
 {
-	int result = 0;
-	zval *merge_result = NULL;
-	php_git2_t *_merge_result = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &merge_result) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_merge_result_is_fastforward(PHP_GIT2_V(_merge_result, merge_result));
-	RETURN_BOOL(result);
+//	int result = 0;
+//	zval *merge_result = NULL;
+//	php_git2_t *_merge_result = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &merge_result) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_merge_result_is_fastforward(PHP_GIT2_V(_merge_result, merge_result));
+//	RETURN_BOOL(result);
 }
 /* }}} */
 
@@ -277,24 +167,24 @@ PHP_FUNCTION(git_merge_result_is_fastforward)
  */
 PHP_FUNCTION(git_merge_result_fastforward_oid)
 {
-	php_git2_t *_merge_result = NULL;
-	git_oid out = {0};
-	zval *merge_result = NULL;
-	int error = 0;
-	char buf[41] = {0};
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &merge_result) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_merge_result_fastforward_oid(&out, PHP_GIT2_V(_merge_result, merge_result));
-	if (php_git2_check_error(error, "git_merge_result_fastforward_oid" TSRMLS_CC)) {
-		RETURN_FALSE;
-	}
-	git_oid_fmt(buf, &out);
-	RETURN_STRING(buf, 1);
+//	php_git2_t *_merge_result = NULL;
+//	git_oid out = {0};
+//	zval *merge_result = NULL;
+//	int error = 0;
+//	char buf[41] = {0};
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &merge_result) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	error = git_merge_result_fastforward_oid(&out, PHP_GIT2_V(_merge_result, merge_result));
+//	if (php_git2_check_error(error, "git_merge_result_fastforward_oid" TSRMLS_CC)) {
+//		RETURN_FALSE;
+//	}
+//	git_oid_fmt(buf, &out);
+//	RETURN_STRING(buf, 1);
 }
 /* }}} */
 
@@ -302,20 +192,20 @@ PHP_FUNCTION(git_merge_result_fastforward_oid)
  */
 PHP_FUNCTION(git_merge_result_free)
 {
-	zval *merge_result = NULL;
-	php_git2_t *_merge_result = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &merge_result) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (GIT2_SHOULD_FREE(_merge_result)) {
-		git_merge_result_free(PHP_GIT2_V(_merge_result, merge_result));
-		GIT2_SHOULD_FREE(_merge_result) = 0;
-	};
-	zval_ptr_dtor(&merge_result);
+//	zval *merge_result = NULL;
+//	php_git2_t *_merge_result = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &merge_result) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_merge_result, php_git2_t*, &merge_result, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	if (GIT2_SHOULD_FREE(_merge_result)) {
+//		git_merge_result_free(PHP_GIT2_V(_merge_result, merge_result));
+//		GIT2_SHOULD_FREE(_merge_result) = 0;
+//	};
+//	zval_ptr_dtor(&merge_result);
 }
 /* }}} */
 

@@ -269,10 +269,10 @@ void php_git2_strarray_free(git_strarray *out)
 	efree(out->strings);
 }
 
-void php_git2_git_checkout_opts_to_array(git_checkout_opts *opts, zval **out TSRMLS_DC)
+void php_git2_git_checkout_opts_to_array(git_checkout_options *opts, zval **out TSRMLS_DC)
 {
 	zval *result;
-	git_checkout_opts tmp = GIT_CHECKOUT_OPTS_INIT;
+	git_checkout_options tmp = GIT_CHECKOUT_OPTIONS_INIT;
 	opts = &tmp;
 
 	MAKE_STD_ZVAL(result);
@@ -334,7 +334,7 @@ void php_git2_git_checkout_opts_to_array(git_checkout_opts *opts, zval **out TSR
 	*out = result;
 }
 
-void php_git_git_checkout_opts_free(git_checkout_opts *target TSRMLS_DC)
+void php_git_git_checkout_opts_free(git_checkout_options *target TSRMLS_DC)
 {
 	php_git2_cb_t *tmp;
 
@@ -450,15 +450,15 @@ void php_git2_fcall_info_wrapper2(zval *target, zend_fcall_info *fci, zend_fcall
 
 
 
-int php_git2_array_to_git_checkout_opts(git_checkout_opts **out, zval *array TSRMLS_DC)
+int php_git2_array_to_git_checkout_opts(git_checkout_options **out, zval *array TSRMLS_DC)
 {
 	const char *target_directory, *our_label, *their_label;
-	git_checkout_opts *opts = NULL, def = GIT_CHECKOUT_OPTS_INIT;
+	git_checkout_options *opts = NULL, def = GIT_CHECKOUT_OPTIONS_INIT;
 	php_git2_cb_t *notify_payload = NULL, *progress_payload= NULL;
 	zval *notify_cb = NULL, *progress_cb = NULL;
 
-	opts = (git_checkout_opts*)emalloc(sizeof(struct git_checkout_opts));
-	memcpy(opts, &def, sizeof(git_checkout_opts));
+	opts = (git_checkout_options*)emalloc(sizeof(struct git_checkout_options));
+	memcpy(opts, &def, sizeof(git_checkout_options));
 
 	notify_cb = php_git2_read_arrval(array, ZEND_STRS("notify_cb") TSRMLS_CC);
 	progress_cb = php_git2_read_arrval(array, ZEND_STRS("progress_cb") TSRMLS_CC);
@@ -595,9 +595,9 @@ void php_git2_diff_file_to_array(git_diff_file *file, zval **out TSRMLS_DC)
 
 	MAKE_STD_ZVAL(result);
 	array_init(result);
-	git_oid_fmt(buf, &file->oid);
+	git_oid_fmt(buf, &file->id);
 
-	add_assoc_string_ex(result, ZEND_STRS("oid"), buf, 1);
+	add_assoc_string_ex(result, ZEND_STRS("id"), buf, 1);
 	add_assoc_string_ex(result, ZEND_STRS("path"), file->path, 1);
 	add_assoc_long_ex(result, ZEND_STRS("size"), file->size);
 	add_assoc_long_ex(result, ZEND_STRS("flags"), file->flags);
@@ -629,7 +629,7 @@ void php_git2_diff_delta_to_array(git_diff_delta *delta, zval **out TSRMLS_DC)
 
 void php_git2_array_to_git_diff_options(git_diff_options *options, zval *array TSRMLS_DC)
 {
-	git_diff_options_init(options, GIT_DIFF_OPTIONS_VERSION);
+	//git_diff_options_init(options, GIT_DIFF_OPTIONS_VERSION);
 
 	options->version = php_git2_read_arrval_long(array, ZEND_STRS("version") TSRMLS_CC);
 	options->flags = php_git2_read_arrval_long(array, ZEND_STRS("flags") TSRMLS_CC);
@@ -640,7 +640,7 @@ void php_git2_array_to_git_diff_options(git_diff_options *options, zval *array T
 
 	options->context_lines = php_git2_read_arrval_long(array, ZEND_STRS("context_lines") TSRMLS_CC);
 	options->interhunk_lines = php_git2_read_arrval_long(array, ZEND_STRS("interhunk_lines") TSRMLS_CC);
-	options->oid_abbrev = php_git2_read_arrval_long(array, ZEND_STRS("oid_abbrev") TSRMLS_CC);
+	options->id_abbrev = php_git2_read_arrval_long(array, ZEND_STRS("id_abbrev") TSRMLS_CC);
 	options->max_size = php_git2_read_arrval_long(array, ZEND_STRS("max_size") TSRMLS_CC);
 	options->old_prefix = php_git2_read_arrval_string(array, ZEND_STRS("old_prefix") TSRMLS_CC);
 	options->new_prefix = php_git2_read_arrval_string(array, ZEND_STRS("new_prefix") TSRMLS_CC);
@@ -677,11 +677,11 @@ void php_git2_git_diff_options_to_array(git_diff_options *options, zval **out TS
 
 	add_assoc_long_ex(result, ZEND_STRS("context_lines"), options->context_lines);
 	add_assoc_long_ex(result, ZEND_STRS("interhunk_lines"), options->interhunk_lines);
-	add_assoc_long_ex(result, ZEND_STRS("oid_abbrev"), options->oid_abbrev);
+	add_assoc_long_ex(result, ZEND_STRS("id_abbrev"), options->id_abbrev);
 	add_assoc_long_ex(result, ZEND_STRS("max_size"), options->max_size);
-	if (options->notify_payload) {
+	if (options->payload) {
 	} else {
-		add_assoc_null_ex(result, ZEND_STRS("notify_payload"));
+		add_assoc_null_ex(result, ZEND_STRS("payload"));
 	}
 	if (options->old_prefix) {
 		add_assoc_string_ex(result, ZEND_STRS("old_prefix"), options->old_prefix, 1);

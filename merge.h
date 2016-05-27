@@ -38,27 +38,6 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_base_many, 0, 0, 3)
 	ZEND_ARG_INFO(0, input_array[])
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_head_from_ref, 0, 0, 2)
-	ZEND_ARG_INFO(0, repo)
-	ZEND_ARG_INFO(0, ref)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_head_from_fetchhead, 0, 0, 4)
-	ZEND_ARG_INFO(0, repo)
-	ZEND_ARG_INFO(0, branch_name)
-	ZEND_ARG_INFO(0, remote_url)
-	ZEND_ARG_INFO(0, oid)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_head_from_oid, 0, 0, 2)
-	ZEND_ARG_INFO(0, repo)
-	ZEND_ARG_INFO(0, oid)
-ZEND_END_ARG_INFO()
-
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_head_free, 0, 0, 1)
-	ZEND_ARG_INFO(0, head)
-ZEND_END_ARG_INFO()
-
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_merge_trees, 0, 0, 5)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, ancestor_tree)
@@ -97,22 +76,6 @@ PHP_FUNCTION(git_merge_base);
 /* {{{ proto resource git_merge_base_many(repo, length, input_array[])
 */
 PHP_FUNCTION(git_merge_base_many);
-
-/* {{{ proto resource git_merge_head_from_ref(repo, ref)
-*/
-PHP_FUNCTION(git_merge_head_from_ref);
-
-/* {{{ proto resource git_merge_head_from_fetchhead(repo, branch_name, remote_url, oid)
-*/
-PHP_FUNCTION(git_merge_head_from_fetchhead);
-
-/* {{{ proto resource git_merge_head_from_oid(repo, oid)
-*/
-PHP_FUNCTION(git_merge_head_from_oid);
-
-/* {{{ proto void git_merge_head_free(head)
-*/
-PHP_FUNCTION(git_merge_head_free);
 
 /* {{{ proto resource git_merge_trees(repo, ancestor_tree, our_tree, their_tree, opts)
 */

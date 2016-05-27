@@ -104,6 +104,10 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_commit_nth_gen_ancestor, 0, 0, 2)
 	ZEND_ARG_INFO(0, n)
 ZEND_END_ARG_INFO()
 
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_commit_free, 0, 0, 1)
+	ZEND_ARG_INFO(0, commit)
+ZEND_END_ARG_INFO()
+
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_commit_create, 0, 0, 8)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, update_ref)
@@ -186,6 +190,8 @@ PHP_FUNCTION(git_commit_parent);
 /* {{{ proto resource git_commit_parent_id(commit, n)
 */
 PHP_FUNCTION(git_commit_parent_id);
+
+PHP_FUNCTION(git_commit_free);
 
 /* {{{ proto resource git_commit_nth_gen_ancestor(commit, n)
 */

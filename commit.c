@@ -128,6 +128,27 @@ PHP_FUNCTION(git_commit_id)
 }
 /* }}} */
 
+
+/* {{{ proto void git_commit_free(commit)
+*/
+PHP_FUNCTION(git_commit_free)
+{
+	zval *commit;
+	php_git2_t *_commit;
+
+	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+	"r", &commit) == FAILURE) {
+		return;
+	}
+	ZEND_FETCH_RESOURCE(_commit, php_git2_t*, &commit, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+
+	if (GIT2_SHOULD_FREE(_commit)) {
+		git_commit_free(PHP_GIT2_V(_commit, commit));
+		GIT2_SHOULD_FREE(_commit) = 0;
+	};
+	zval_ptr_dtor(&commit);
+}
+
 /* {{{ proto resource git_commit_owner(resource $commit)
  */
 PHP_FUNCTION(git_commit_owner)

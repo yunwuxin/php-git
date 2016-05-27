@@ -41,18 +41,20 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_dwim, 0, 0, 2)
 	ZEND_ARG_INFO(0, shorthand)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_symbolic_create, 0, 0, 4)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_symbolic_create, 0, 0, 5)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, name)
 	ZEND_ARG_INFO(0, target)
 	ZEND_ARG_INFO(0, force)
+	ZEND_ARG_INFO(0, message)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_create, 0, 0, 4)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_create, 0, 0, 5)
 	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, name)
 	ZEND_ARG_INFO(0, id)
 	ZEND_ARG_INFO(0, force)
+	ZEND_ARG_INFO(0, message)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_target, 0, 0, 1)
@@ -83,20 +85,23 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_owner, 0, 0, 1)
 	ZEND_ARG_INFO(0, ref)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_symbolic_set_target, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_symbolic_set_target, 0, 0, 3)
 	ZEND_ARG_INFO(0, ref)
 	ZEND_ARG_INFO(0, target)
+	ZEND_ARG_INFO(0, message)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_set_target, 0, 0, 2)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_set_target, 0, 0, 3)
 	ZEND_ARG_INFO(0, ref)
 	ZEND_ARG_INFO(0, id)
+	ZEND_ARG_INFO(0, message)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_rename, 0, 0, 3)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_rename, 0, 0, 4)
 	ZEND_ARG_INFO(0, ref)
 	ZEND_ARG_INFO(0, new_name)
 	ZEND_ARG_INFO(0, force)
+	ZEND_ARG_INFO(0, message)
 ZEND_END_ARG_INFO()
 
 ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_delete, 0, 0, 1)
@@ -157,7 +162,8 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_foreach_glob, 0, 0, 4)
 	ZEND_ARG_INFO(1, payload)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_has_log, 0, 0, 1)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_reference_has_log, 0, 0, 2)
+	ZEND_ARG_INFO(0, repo)
 	ZEND_ARG_INFO(0, ref)
 ZEND_END_ARG_INFO()
 
@@ -204,11 +210,11 @@ PHP_FUNCTION(git_reference_name_to_id);
 */
 PHP_FUNCTION(git_reference_dwim);
 
-/* {{{ proto resource git_reference_symbolic_create(repo, name, target, force)
+/* {{{ proto resource git_reference_symbolic_create(repo, name, target, force, message)
 */
 PHP_FUNCTION(git_reference_symbolic_create);
 
-/* {{{ proto resource git_reference_create(repo, name, id, force)
+/* {{{ proto resource git_reference_create(repo, name, id, force, message)
 */
 PHP_FUNCTION(git_reference_create);
 
@@ -240,15 +246,15 @@ PHP_FUNCTION(git_reference_resolve);
 */
 PHP_FUNCTION(git_reference_owner);
 
-/* {{{ proto resource git_reference_symbolic_set_target(ref, target)
+/* {{{ proto resource git_reference_symbolic_set_target(ref, target, message)
 */
 PHP_FUNCTION(git_reference_symbolic_set_target);
 
-/* {{{ proto resource git_reference_set_target(ref, id)
+/* {{{ proto resource git_reference_set_target(ref, id, message)
 */
 PHP_FUNCTION(git_reference_set_target);
 
-/* {{{ proto resource git_reference_rename(ref, new_name, force)
+/* {{{ proto resource git_reference_rename(ref, new_name, force, message)
 */
 PHP_FUNCTION(git_reference_rename);
 
@@ -300,7 +306,7 @@ PHP_FUNCTION(git_reference_iterator_free);
 */
 PHP_FUNCTION(git_reference_foreach_glob);
 
-/* {{{ proto long git_reference_has_log(ref)
+/* {{{ proto long git_reference_has_log(repo, ref)
 */
 PHP_FUNCTION(git_reference_has_log);
 

@@ -55,11 +55,11 @@ void php_git2_array_to_strarray(git_strarray *out, zval *array TSRMLS_DC);
 
 void php_git2_strarray_free(git_strarray *out);
 
-void php_git2_git_checkout_opts_to_array(git_checkout_opts *opts, zval **out TSRMLS_DC);
+void php_git2_git_checkout_opts_to_array(git_checkout_options *opts, zval **out TSRMLS_DC);
 
-void php_git_git_checkout_opts_free(git_checkout_opts *target TSRMLS_DC);
+void php_git_git_checkout_opts_free(git_checkout_options *target TSRMLS_DC);
 
-int php_git2_array_to_git_checkout_opts(git_checkout_opts **out, zval *array TSRMLS_DC);
+int php_git2_array_to_git_checkout_opts(git_checkout_options **out, zval *array TSRMLS_DC);
 
 int php_git2_multi_cb_init(php_git2_multi_cb_t **out, void *payload TSRMLS_DC, int num_callbacks, ...);
 

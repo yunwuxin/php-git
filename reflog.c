@@ -76,23 +76,23 @@ PHP_FUNCTION(git_reflog_append)
  */
 PHP_FUNCTION(git_reflog_append_to)
 {
-	int result = 0, name_len = 0, id_len = 0, msg_len = 0;
-	zval *repo = NULL, *committer = NULL;
-	php_git2_t *_repo = NULL;
-	char *name = NULL, *id = NULL, *msg = NULL;
-	git_oid __id = {0};
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rssas", &repo, &name, &name_len, &id, &id_len, &committer, &msg, &msg_len) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	if (git_oid_fromstrn(&__id, id, id_len)) {
-		RETURN_FALSE;
-	}
-	result = git_reflog_append_to(PHP_GIT2_V(_repo, repository), name, &__id, committer, msg);
-	RETURN_LONG(result);
+//	int result = 0, name_len = 0, id_len = 0, msg_len = 0;
+//	zval *repo = NULL, *committer = NULL;
+//	php_git2_t *_repo = NULL;
+//	char *name = NULL, *id = NULL, *msg = NULL;
+//	git_oid __id = {0};
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"rssas", &repo, &name, &name_len, &id, &id_len, &committer, &msg, &msg_len) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	if (git_oid_fromstrn(&__id, id, id_len)) {
+//		RETURN_FALSE;
+//	}
+//	result = git_reflog_append_to(PHP_GIT2_V(_repo, repository), name, &__id, committer, msg);
+//	RETURN_LONG(result);
 }
 /* }}} */
 

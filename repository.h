@@ -122,8 +122,7 @@ ZEND_BEGIN_ARG_INFO_EX(arginfo_git_repository_index, 0, 0, 1)
 	ZEND_ARG_INFO(0, repo)
 ZEND_END_ARG_INFO()
 
-ZEND_BEGIN_ARG_INFO_EX(arginfo_git_repository_message, 0, 0, 2)
-	ZEND_ARG_INFO(0, len)
+ZEND_BEGIN_ARG_INFO_EX(arginfo_git_repository_message, 0, 0, 1)
 	ZEND_ARG_INFO(0, repo)
 ZEND_END_ARG_INFO()
 

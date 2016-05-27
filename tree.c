@@ -108,7 +108,7 @@ PHP_FUNCTION(git_tree_entry_byoid)
 	PHP_GIT2_MAKE_RESOURCE(result);
 	ZEND_FETCH_RESOURCE(git2, php_git2_t*, &tree, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 
-	entry = git_tree_entry_byoid(PHP_GIT2_V(git2, tree), &id);
+	entry = git_tree_entry_byid(PHP_GIT2_V(git2, tree), &id);
 
 	PHP_GIT2_V(result, tree_entry) = entry;
 	result->type = PHP_GIT2_TYPE_TREE_ENTRY;
@@ -168,6 +168,10 @@ PHP_FUNCTION(git_tree_entry_bypath)
 	ZEND_FETCH_RESOURCE(git2, php_git2_t*, &tree, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
 
 	error = git_tree_entry_bypath(&entry, PHP_GIT2_V(git2, tree), path);
+
+	if (php_git2_check_error(error, "git_tree_entry_bypath" TSRMLS_CC)) {
+		RETURN_FALSE
+	}
 
 	PHP_GIT2_V(result, tree_entry) = entry;
 	result->type = PHP_GIT2_TYPE_TREE_ENTRY;
@@ -357,6 +361,7 @@ PHP_FUNCTION(git_tree_entry_dup)
 	zval *tree_entry;
 	php_git2_t *git2, *result;
 	git_tree_entry *entry;
+	int error;
 
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
 		"r", &tree_entry) == FAILURE) {
@@ -364,7 +369,11 @@ PHP_FUNCTION(git_tree_entry_dup)
 	}
 
 	ZEND_FETCH_RESOURCE(git2, php_git2_t*, &tree_entry, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	entry = git_tree_entry_dup(PHP_GIT2_V(git2, tree_entry));
+	error = git_tree_entry_dup(&entry, PHP_GIT2_V(git2, tree_entry));
+
+	if (php_git2_check_error(error, "git_tree_entry_dup" TSRMLS_CC)) {
+		RETURN_FALSE
+	}
 
 	PHP_GIT2_MAKE_RESOURCE(result);
 	PHP_GIT2_V(result, tree_entry) = entry;

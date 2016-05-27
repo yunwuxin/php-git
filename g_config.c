@@ -207,7 +207,7 @@ PHP_FUNCTION(git_config_find_global)
 	size_t buffer_len = GIT2_BUFFER_SIZE;
 	int error = 0;
 
-	error = git_config_find_global(buffer, buffer_len);
+	error = git_config_find_global(buffer);
 	if (php_git2_check_error(error, "git_config_find_global" TSRMLS_CC)) {
 		RETURN_FALSE
 	}
@@ -237,7 +237,7 @@ PHP_FUNCTION(git_config_find_system)
 	size_t buffer_len = GIT2_BUFFER_SIZE;
 	int error = 0;
 
-	error = git_config_find_system(buffer, buffer_len);
+	error = git_config_find_system(buffer);
 	if (php_git2_check_error(error, "git_config_find_system" TSRMLS_CC)) {
 		RETURN_FALSE
 	}
@@ -398,21 +398,21 @@ PHP_FUNCTION(git_config_open_global)
 */
 PHP_FUNCTION(git_config_refresh)
 {
-	zval *cfg;
-	php_git2_t *_cfg;
-	int error = 0;
-
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &cfg) == FAILURE) {
-		return;
-	}
-	ZEND_FETCH_RESOURCE(_cfg, php_git2_t*, &cfg, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_config_refresh(PHP_GIT2_V(_cfg, config));
-	if (php_git2_check_error(error, "git_config_refresh" TSRMLS_CC)) {
-		RETURN_FALSE
-	}
-
-	RETURN_TRUE;
+//	zval *cfg;
+//	php_git2_t *_cfg;
+//	int error = 0;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &cfg) == FAILURE) {
+//		return;
+//	}
+//	ZEND_FETCH_RESOURCE(_cfg, php_git2_t*, &cfg, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	error = git_config_refresh(PHP_GIT2_V(_cfg, config));
+//	if (php_git2_check_error(error, "git_config_refresh" TSRMLS_CC)) {
+//		RETURN_FALSE
+//	}
+//
+//	RETURN_TRUE;
 }
 
 /* {{{ proto void git_config_free(resource $cfg)

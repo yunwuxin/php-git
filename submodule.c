@@ -147,18 +147,18 @@ PHP_FUNCTION(git_submodule_add_to_index)
  */
 PHP_FUNCTION(git_submodule_save)
 {
-	int result = 0, error = 0;
-	zval *submodule = NULL;
-	php_git2_t *_submodule = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &submodule) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_save(PHP_GIT2_V(_submodule, submodule));
-	RETURN_LONG(result);
+//	int result = 0, error = 0;
+//	zval *submodule = NULL;
+//	php_git2_t *_submodule = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &submodule) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_submodule_save(PHP_GIT2_V(_submodule, submodule));
+//	RETURN_LONG(result);
 }
 /* }}} */
 
@@ -241,22 +241,23 @@ PHP_FUNCTION(git_submodule_url)
 }
 /* }}} */
 
-/* {{{ proto long git_submodule_set_url(resource $submodule, string $url)
+/* {{{ proto long git_submodule_set_url(resource $submodule,string name , string $url)
  */
 PHP_FUNCTION(git_submodule_set_url)
 {
-	int result = 0, url_len = 0, error = 0;
+	char *name = NULL;
+	int result = 0, url_len = 0, error = 0,name_len = 0;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
 	char *url = NULL;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rs", &submodule, &url, &url_len) == FAILURE) {
+		"rss", &submodule,&name,&name_len, &url, &url_len) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_set_url(PHP_GIT2_V(_submodule, submodule), url);
+	result = git_submodule_set_url(PHP_GIT2_V(_submodule, submodule),name, url);
 	RETURN_LONG(result);
 }
 /* }}} */
@@ -343,61 +344,66 @@ PHP_FUNCTION(git_submodule_ignore)
 }
 /* }}} */
 
-/* {{{ proto long git_submodule_set_ignore(resource $submodule,  $ignore)
+/* {{{ proto long git_submodule_set_ignore(resource $submodule,$name , $ignore)
  */
 PHP_FUNCTION(git_submodule_set_ignore)
 {
+	char *name = NULL;
+	int name_len = 0;
 	git_submodule_ignore_t result;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
 	long ignore = 0;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rl", &submodule, &ignore) == FAILURE) {
+		"rsl", &submodule,&name,&name_len, &ignore) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_set_ignore(PHP_GIT2_V(_submodule, submodule), ignore);
+	result = git_submodule_set_ignore(PHP_GIT2_V(_submodule, submodule),name, ignore);
 	RETURN_LONG(result);
 }
 /* }}} */
 
-/* {{{ proto resource git_submodule_update(resource $submodule)
+/* {{{ proto resource git_submodule_update(resource $submodule,long init,long options)
  */
 PHP_FUNCTION(git_submodule_update)
 {
 	git_submodule_update_t result;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
+	long init = 0,*options = 0;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &submodule) == FAILURE) {
+		"rll", &submodule,&init,&options) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_update(PHP_GIT2_V(_submodule, submodule));
+	result = git_submodule_update(PHP_GIT2_V(_submodule, submodule),init,&options);
 	RETURN_LONG(result);
 }
 /* }}} */
 
-/* {{{ proto resource git_submodule_set_update(resource $submodule,  $update)
+/* {{{ proto resource git_submodule_set_update(resource $submodule,string name,  $update)
  */
 PHP_FUNCTION(git_submodule_set_update)
 {
+	char *name = NULL;
 	git_submodule_update_t result;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
 	long update = 0;
+	int name_len = 0;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rl", &submodule, &update) == FAILURE) {
+		"rsl", &submodule,&name,&name_len, &update) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_set_update(PHP_GIT2_V(_submodule, submodule), update);
+	result = git_submodule_set_update(PHP_GIT2_V(_submodule, submodule),name, update);
 	RETURN_LONG(result);
 }
 /* }}} */
@@ -421,22 +427,23 @@ PHP_FUNCTION(git_submodule_fetch_recurse_submodules)
 }
 /* }}} */
 
-/* {{{ proto long git_submodule_set_fetch_recurse_submodules(resource $submodule, long $fetch_recurse_submodules)
+/* {{{ proto long git_submodule_set_fetch_recurse_submodules(resource $submodule,string name, long $fetch_recurse_submodules)
  */
 PHP_FUNCTION(git_submodule_set_fetch_recurse_submodules)
 {
-	int result = 0, error = 0;
+	char *name = NULL;
+	int result = 0, error = 0,name_len = 0;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
 	long fetch_recurse_submodules = 0;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"rl", &submodule, &fetch_recurse_submodules) == FAILURE) {
+		"rsl", &submodule,&name,&name_len, &fetch_recurse_submodules) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_set_fetch_recurse_submodules(PHP_GIT2_V(_submodule, submodule), fetch_recurse_submodules);
+	result = git_submodule_set_fetch_recurse_submodules(PHP_GIT2_V(_submodule, submodule),name, fetch_recurse_submodules);
 	RETURN_LONG(result);
 }
 /* }}} */
@@ -500,21 +507,22 @@ PHP_FUNCTION(git_submodule_open)
 }
 /* }}} */
 
-/* {{{ proto long git_submodule_reload(resource $submodule)
+/* {{{ proto long git_submodule_reload(resource $submodule,long force)
  */
 PHP_FUNCTION(git_submodule_reload)
 {
 	int result = 0, error = 0;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
+	long force = 0;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &submodule) == FAILURE) {
+		"rl", &submodule,&force) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_reload(PHP_GIT2_V(_submodule, submodule));
+	result = git_submodule_reload(PHP_GIT2_V(_submodule, submodule),force);
 	RETURN_LONG(result);
 }
 /* }}} */
@@ -523,37 +531,38 @@ PHP_FUNCTION(git_submodule_reload)
  */
 PHP_FUNCTION(git_submodule_reload_all)
 {
-	int result = 0, error = 0;
-	zval *repo = NULL;
-	php_git2_t *_repo = NULL;
-	
-	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"r", &repo) == FAILURE) {
-		return;
-	}
-	
-	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_reload_all(PHP_GIT2_V(_repo, repository));
-	RETURN_LONG(result);
+//	int result = 0, error = 0;
+//	zval *repo = NULL;
+//	php_git2_t *_repo = NULL;
+//
+//	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
+//		"r", &repo) == FAILURE) {
+//		return;
+//	}
+//
+//	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
+//	result = git_submodule_reload_all(PHP_GIT2_V(_repo, repository));
+//	RETURN_LONG(result);
 }
 /* }}} */
 
-/* {{{ proto long git_submodule_status(long $status, resource $submodule)
+/* {{{ proto long git_submodule_status(long $status, resource $submodule. string name,long ignore)
  */
 PHP_FUNCTION(git_submodule_status)
 {
-	int result = 0, error = 0;
-	long status = 0;
+	char *name = NULL;
+	int result = 0, error = 0,name_len = 0;
+	long status = 0,ignore = 0;
 	zval *submodule = NULL;
 	php_git2_t *_submodule = NULL;
 	
 	if (zend_parse_parameters(ZEND_NUM_ARGS() TSRMLS_CC,
-		"lr", &status, &submodule) == FAILURE) {
+		"lrsl", &status, &submodule,&name,&name_len,&ignore) == FAILURE) {
 		return;
 	}
 	
 	ZEND_FETCH_RESOURCE(_submodule, php_git2_t*, &submodule, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_submodule_status(status, PHP_GIT2_V(_submodule, submodule));
+	result = git_submodule_status(status, PHP_GIT2_V(_submodule, submodule),name,ignore);
 	RETURN_LONG(result);
 }
 /* }}} */

@@ -253,7 +253,7 @@ PHP_FUNCTION(git_branch_upstream_name)
 	}
 
 	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_branch_upstream_name(&tracking_branch_name_out, buffer_size, PHP_GIT2_V(_repo, repository), canonical_branch_name);
+	error = git_branch_upstream_name(&tracking_branch_name_out, PHP_GIT2_V(_repo, repository), canonical_branch_name);
 	if (php_git2_check_error(error, "git_branch_upstream_name" TSRMLS_CC)) {
 		RETURN_FALSE;
 	}
@@ -298,7 +298,7 @@ PHP_FUNCTION(git_branch_remote_name)
 	}
 
 	ZEND_FETCH_RESOURCE(_repo, php_git2_t*, &repo, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	error = git_branch_remote_name(&remote_name_out, buffer_size, PHP_GIT2_V(_repo, repository), canonical_branch_name);
+	error = git_branch_remote_name(&remote_name_out, PHP_GIT2_V(_repo, repository), canonical_branch_name);
 	if (php_git2_check_error(error, "git_branch_remote_name" TSRMLS_CC)) {
 		RETURN_FALSE;
 	}

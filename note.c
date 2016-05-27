@@ -135,7 +135,7 @@ PHP_FUNCTION(git_note_oid)
 	}
 	
 	ZEND_FETCH_RESOURCE(_note, php_git2_t*, &note, -1, PHP_GIT2_RESOURCE_NAME, git2_resource_handle);
-	result = git_note_oid(PHP_GIT2_V(_note, note));
+	result = git_note_id(PHP_GIT2_V(_note, note));
 	git_oid_fmt(__result, result);
 	RETURN_STRING(__result, 1);
 }

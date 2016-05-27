@@ -30,14 +30,14 @@ static int php_git2_index_matched_path_cb(const char *path, const char *matched_
 
 static int php_git2_array_to_index_entry(git_index_entry *entry, zval *array TSRMLS_DC)
 {
-	zval *ctime, *mtime, *oid;
+	zval *ctime, *mtime, *id;
 	memset(entry, '\0', sizeof(git_index_entry));
 
 	ctime = php_git2_read_arrval(array, ZEND_STRS("ctime") TSRMLS_CC);
 	mtime = php_git2_read_arrval(array, ZEND_STRS("mtime") TSRMLS_CC);
 
-	oid = php_git2_read_arrval(array, ZEND_STRS("oid") TSRMLS_CC);
-	if (git_oid_fromstrn(&entry->oid, Z_STRVAL_P(oid), Z_STRLEN_P(oid)) != GIT_OK) {
+	id = php_git2_read_arrval(array, ZEND_STRS("id") TSRMLS_CC);
+	if (git_oid_fromstrn(&entry->id, Z_STRVAL_P(id), Z_STRLEN_P(id)) != GIT_OK) {
 		return 0;
 	}
 
@@ -70,7 +70,7 @@ static void php_git2_index_entry_to_array(const git_index_entry *entry, zval **r
 	array_init(ctime);
 	array_init(mtime);
 
-	git_oid_fmt(buf, &entry->oid);
+	git_oid_fmt(buf, &entry->id);
 
 	add_assoc_long_ex(ctime, ZEND_STRS("seconds"), entry->ctime.seconds);
 	add_assoc_long_ex(ctime, ZEND_STRS("nanoseconds"), entry->ctime.nanoseconds);
@@ -86,7 +86,7 @@ static void php_git2_index_entry_to_array(const git_index_entry *entry, zval **r
 	add_assoc_long_ex(tmp, ZEND_STRS("uid"), entry->uid);
 	add_assoc_long_ex(tmp, ZEND_STRS("gid"), entry->gid);
 	add_assoc_long_ex(tmp, ZEND_STRS("file_size"), entry->file_size);
-	add_assoc_string_ex(tmp, ZEND_STRS("oid"), buf, 1);
+	add_assoc_string_ex(tmp, ZEND_STRS("id"), buf, 1);
 	add_assoc_long_ex(tmp, ZEND_STRS("flags"), entry->flags);
 	add_assoc_long_ex(tmp, ZEND_STRS("flags_extended"), entry->flags_extended);
 	add_assoc_string_ex(tmp, ZEND_STRS("path"), entry->path, 1);
